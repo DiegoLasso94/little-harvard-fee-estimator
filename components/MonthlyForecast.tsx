@@ -65,7 +65,7 @@ export function MonthlyForecast({
                 </td>
 
                 <td className="px-4 py-3 text-center">
-                  {row.sundays}
+                  {row.Weeks}
                 </td>
 
                 <td className="px-4 py-3 text-right">
