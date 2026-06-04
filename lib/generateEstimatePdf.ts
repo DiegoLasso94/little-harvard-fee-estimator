@@ -35,13 +35,19 @@ function addPageIfNeeded(
 }
 
 export async function generateEstimatePdf(children: Child[]): Promise<void> {
-  const [{ jsPDF }, autoTableModule, { calculateChild, calculateFamilySummary }, format] =
-    await Promise.all([
-      import("jspdf"),
-      import("jspdf-autotable"),
-      import("./calculations"),
-      import("./format"),
-    ]);
+  const [
+    { jsPDF },
+    autoTableModule,
+    { calculateChild, calculateFamilySummary },
+    format,
+    { generateMonthlyForecast },
+  ] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable"),
+    import("./calculations"),
+    import("./format"),
+    import("./monthlyForecast"),
+  ]);
 
   const autoTable = autoTableModule.default as AutoTableFn;
   const { formatCurrencyPdf, formatDate, formatGeneratedAt, formatHours } = format;
@@ -119,8 +125,8 @@ export async function generateEstimatePdf(children: Child[]): Promise<void> {
         ["Fee (after sibling discount)", formatCurrencyPdf(calc.fee)],
         ["ECCE funding", formatCurrencyPdf(calc.ecceFunding)],
         ["NCS funding", formatCurrencyPdf(calc.ncsFunding)],
-        ["Parent contribution", formatCurrencyPdf(calc.parentContribution)],
-      ],
+        ["Estimated Monthly Payment", formatCurrencyPdf(calc.parentContribution)],
+        ],
       theme: "striped",
       styles: { fontSize: 10, cellPadding: 3 },
       headStyles: {
@@ -197,6 +203,46 @@ export async function generateEstimatePdf(children: Child[]): Promise<void> {
       }
     },
   });
+  doc.addPage();
+
+const forecast =
+  generateMonthlyForecast(children);
+
+doc.setFontSize(14);
+doc.setTextColor(...BRAND_RGB);
+doc.text("12 Month Forecast", MARGIN, MARGIN);
+
+autoTable(doc, {
+  startY: MARGIN + 8,
+  margin: {
+    left: MARGIN,
+    right: MARGIN,
+  },
+  head: [[
+    "Month",
+    "Weeks",
+    "ECCE",
+    "NCS",
+    "Estimated Monthly Payment",
+  ]],
+  body: forecast.map((row) => [
+    `${row.month} ${row.year}`,
+    String(row.weeks),
+    formatCurrencyPdf(row.ecce),
+    formatCurrencyPdf(row.ncs),
+    formatCurrencyPdf(row.contribution),
+  ]),
+  theme: "striped",
+  styles: {
+    fontSize: 9,
+    cellPadding: 3,
+  },
+  headStyles: {
+    fillColor: BRAND_RGB,
+    textColor: 255,
+    fontStyle: "bold",
+  },
+});
 
   y = getTableEndY(doc, y + 40) + 8;
 
