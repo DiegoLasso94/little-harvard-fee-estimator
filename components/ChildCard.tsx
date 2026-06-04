@@ -127,7 +127,7 @@ export function ChildCard({
             </div>
 
             <Field
-              label="Days attending per week"
+              label="ECCE Days per week"
               htmlFor={`${child.id}-days`}
             >
               <SelectInput
