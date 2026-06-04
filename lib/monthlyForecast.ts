@@ -4,7 +4,7 @@ import type { Child } from "./types";
 export interface MonthlyForecastRow {
   month: string;
   year: number;
-  Weeks: number;
+  weeks: number;
   fee: number;
   ecce: number;
   ncs: number;
@@ -12,7 +12,7 @@ export interface MonthlyForecastRow {
 }
 
 function countWeeks(year: number, month: number): number {
-  let sundays = 0;
+  let weeks = 0;
 
   const daysInMonth = new Date(
     year,
@@ -24,11 +24,11 @@ function countWeeks(year: number, month: number): number {
     const date = new Date(year, month, day);
 
     if (date.getDay() === 0) {
-      sundays++;
+      weeks++;
     }
   }
 
-  return sundays;
+  return weeks;
 }
 
 function getNext12Months() {
@@ -66,7 +66,7 @@ export function generateMonthlyForecast(
     let ecce = 0;
     let ncs = 0;
 
-    const sundays = countSundays(
+    const weeks = countWeeks(
       monthInfo.year,
       monthInfo.month
     );
@@ -86,7 +86,7 @@ export function generateMonthlyForecast(
       const monthlyNcs =
         weeklyHours *
         child.ncsHourlyRate *
-        Weeks;
+        weeks;
 
       ncs += monthlyNcs;
 
@@ -101,7 +101,7 @@ export function generateMonthlyForecast(
     return {
       month: monthInfo.name,
       year: monthInfo.year,
-      Weeks,
+      weeks,
       fee,
       ecce,
       ncs,
