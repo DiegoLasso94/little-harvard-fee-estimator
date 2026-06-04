@@ -33,7 +33,7 @@ export function MonthlyForecast({
               </th>
 
               <th className="px-4 py-3 text-center text-sm font-semibold text-slate-700">
-                Funded Weeks
+                Weeks
               </th>
 
               <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">
@@ -49,7 +49,7 @@ export function MonthlyForecast({
               </th>
 
               <th className="px-4 py-3 text-right text-sm font-semibold text-slate-700">
-                Parent Pays
+                Estimated Monthly Payment
               </th>
             </tr>
           </thead>
@@ -65,7 +65,7 @@ export function MonthlyForecast({
                 </td>
 
                 <td className="px-4 py-3 text-center">
-                  {row.Weeks}
+                  {row.weeks}
                 </td>
 
                 <td className="px-4 py-3 text-right">
