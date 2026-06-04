@@ -4,14 +4,14 @@ import type { Child } from "./types";
 export interface MonthlyForecastRow {
   month: string;
   year: number;
-  sundays: number;
+  Weeks: number;
   fee: number;
   ecce: number;
   ncs: number;
   contribution: number;
 }
 
-function countSundays(year: number, month: number): number {
+function countWeeks(year: number, month: number): number {
   let sundays = 0;
 
   const daysInMonth = new Date(
@@ -86,7 +86,7 @@ export function generateMonthlyForecast(
       const monthlyNcs =
         weeklyHours *
         child.ncsHourlyRate *
-        sundays;
+        Weeks;
 
       ncs += monthlyNcs;
 
@@ -101,7 +101,7 @@ export function generateMonthlyForecast(
     return {
       month: monthInfo.name,
       year: monthInfo.year,
-      sundays,
+      Weeks,
       fee,
       ecce,
       ncs,
