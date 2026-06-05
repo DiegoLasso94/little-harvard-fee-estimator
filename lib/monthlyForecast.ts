@@ -1,6 +1,13 @@
 import { calculateChild } from "./calculations";
 import type { Child } from "./types";
 
+const ECCE_FUNDING_BY_DAYS = {
+  2: 98.04,
+  3: 147.06,
+  4: 196.08,
+  5: 245.1,
+} as const;
+
 export interface MonthlyForecastRow {
   month: string;
   year: number;
@@ -52,7 +59,7 @@ function getNext12Months() {
 }
 
 function isEcceMonth(month: number): boolean {
-  // September -> June
+  // September (8) -> June (5)
   return month >= 8 || month <= 5;
 }
 
@@ -134,7 +141,7 @@ export function generateMonthlyForecast(
         ? child.termTimeHoursPerWeek
         : child.nonTermTimeHoursPerWeek;
 
-      // Reduce NCS hours by ECCE hours
+      // When ECCE applies, reduce NCS claimable hours by 15
       if (ecceActive) {
         weeklyHours = Math.max(
           0,
@@ -149,11 +156,15 @@ export function generateMonthlyForecast(
 
       ncs += monthlyNcs;
 
+      // ECCE only pays September -> June
       if (
         ecceActive &&
         useTermHours
       ) {
-        ecce += calc.ecceFunding;
+        ecce +=
+          ECCE_FUNDING_BY_DAYS[
+            child.daysPerWeek
+          ];
       }
     });
 
