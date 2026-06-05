@@ -210,6 +210,8 @@ export function ChildCard({
                 id={`${child.id}-term`}
                 placeholder="0"
                 step="0.5"
+                min={0}
+                max={45}
                 value={child.termTimeHoursPerWeek || ""}
                 onChange={(e) =>
                   update(
@@ -228,6 +230,8 @@ export function ChildCard({
                 id={`${child.id}-nonterm`}
                 placeholder="0"
                 step="0.5"
+                min={0}
+                max={45}
                 value={child.nonTermTimeHoursPerWeek || ""}
                 onChange={(e) =>
                   update(

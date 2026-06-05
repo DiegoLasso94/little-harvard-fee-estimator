@@ -35,7 +35,14 @@ export function normalizeChild(child: Child): Child {
     siblingDiscountPercent: Number(child.siblingDiscountPercent) || 0,
     daysPerWeek: validDays,
     ncsHourlyRate: Number(child.ncsHourlyRate) || 0,
-    termTimeHoursPerWeek: Number(child.termTimeHoursPerWeek) || 0,
-    nonTermTimeHoursPerWeek: Number(child.nonTermTimeHoursPerWeek) || 0,
+    termTimeHoursPerWeek: Math.min(
+  45,
+  Number(child.termTimeHoursPerWeek) || 0
+),
+
+nonTermTimeHoursPerWeek: Math.min(
+  45,
+  Number(child.nonTermTimeHoursPerWeek) || 0
+),
   };
 }
