@@ -115,6 +115,51 @@ export async function generateEstimatePdf(children: Child[]): Promise<void> {
     });
 
     y = getTableEndY(doc, y + 40) + 4;
+    doc.setFillColor(255, 248, 235);
+doc.roundedRect(
+  MARGIN,
+  y,
+  PAGE_WIDTH - MARGIN * 2,
+  22,
+  2,
+  2,
+  "F"
+);
+
+doc.setFontSize(8);
+doc.setTextColor(180, 100, 0);
+
+doc.text(
+  "ECCE funding applies during the ECCE programme year",
+  MARGIN + 3,
+  y + 6
+);
+
+doc.text(
+  "(September to June only).",
+  MARGIN + 3,
+  y + 10
+);
+
+doc.text(
+  "NCS and ECCE funding amounts shown are estimates only and",
+  MARGIN + 3,
+  y + 16
+);
+
+doc.text(
+  "may vary depending on approved funding rates, attendance",
+  MARGIN + 3,
+  y + 20
+);
+
+doc.text(
+  "patterns and eligibility.",
+  MARGIN + 3,
+  y + 24
+);
+
+y += 30;
     y = addPageIfNeeded(doc, y, 35);
 
     autoTable(doc, {
