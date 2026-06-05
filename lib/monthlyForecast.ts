@@ -52,8 +52,52 @@ function getNext12Months() {
 }
 
 function isEcceMonth(month: number): boolean {
-  // September (8) to June (5)
+  // September -> June
   return month >= 8 || month <= 5;
+}
+
+function getEcceStartYear(dateOfBirth: string): number {
+  const dob = new Date(dateOfBirth);
+
+  return dob.getMonth() >= 8
+    ? dob.getFullYear() + 3
+    : dob.getFullYear() + 2;
+}
+
+function isEcceEligibleForMonth(
+  child: Child,
+  year: number,
+  month: number
+): boolean {
+  if (!child.dateOfBirth) {
+    return false;
+  }
+
+  const ecceStartYear =
+    getEcceStartYear(child.dateOfBirth);
+
+  const forecastDate = new Date(
+    year,
+    month,
+    1
+  );
+
+  const ecceStartDate = new Date(
+    ecceStartYear,
+    8, // September
+    1
+  );
+
+  const ecceEndDate = new Date(
+    ecceStartYear + 2,
+    5, // June
+    30
+  );
+
+  return (
+    forecastDate >= ecceStartDate &&
+    forecastDate <= ecceEndDate
+  );
 }
 
 export function generateMonthlyForecast(
@@ -76,12 +120,27 @@ export function generateMonthlyForecast(
 
       fee += calc.fee;
 
+      const ecceActive =
+        isEcceEligibleForMonth(
+          child,
+          monthInfo.year,
+          monthInfo.month
+        );
+
       const useTermHours =
         isEcceMonth(monthInfo.month);
 
-      const weeklyHours = useTermHours
+      let weeklyHours = useTermHours
         ? child.termTimeHoursPerWeek
         : child.nonTermTimeHoursPerWeek;
+
+      // Reduce NCS hours by ECCE hours
+      if (ecceActive) {
+        weeklyHours = Math.max(
+          0,
+          weeklyHours - 15
+        );
+      }
 
       const monthlyNcs =
         weeklyHours *
@@ -91,8 +150,8 @@ export function generateMonthlyForecast(
       ncs += monthlyNcs;
 
       if (
-        useTermHours &&
-        calc.ecceEligible
+        ecceActive &&
+        useTermHours
       ) {
         ecce += calc.ecceFunding;
       }
