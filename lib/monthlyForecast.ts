@@ -63,12 +63,12 @@ function isEcceMonth(month: number): boolean {
   return month >= 8 || month <= 5;
 }
 
-function getEcceStartYear(dateOfBirth: string): number {
+function getEcceStartYear(
+  dateOfBirth: string
+): number {
   const dob = new Date(dateOfBirth);
 
-  return dob.getMonth() >= 8
-    ? dob.getFullYear() + 3
-    : dob.getFullYear() + 2;
+  return dob.getFullYear() + 3;
 }
 
 function isEcceEligibleForMonth(

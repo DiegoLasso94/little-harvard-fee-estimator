@@ -38,9 +38,7 @@ function getEcceDates(dateOfBirth: string) {
   const dob = new Date(dateOfBirth);
 
   const startYear =
-    dob.getMonth() >= 8
-      ? dob.getFullYear() + 3
-      : dob.getFullYear() + 2;
+    dob.getFullYear() + 3;
 
   return {
     eligible: isEcceEligible(dateOfBirth),
