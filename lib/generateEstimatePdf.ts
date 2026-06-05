@@ -85,6 +85,8 @@ export async function generateEstimatePdf(children: Child[]): Promise<void> {
       head: [["Child details", ""]],
       body: [
         ["Date of birth", formatDate(child.dateOfBirth)],
+        ["ECCE start", calc.ecceStartDate],
+        ["ECCE end", calc.ecceEndDate],
         ["Days attending per week", String(child.daysPerWeek)],
         ["Gross monthly fee", formatCurrencyPdf(calc.grossFee)],
         [
