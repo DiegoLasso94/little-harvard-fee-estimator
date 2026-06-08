@@ -130,20 +130,35 @@ export function generateMonthlyForecast(
 
       fee += calc.fee;
 
-      const ecceActive =
+      const ecceEligible =
         isEcceEligibleForMonth(
           child,
           monthInfo.year,
           monthInfo.month
-        ) &&
-        isProgrammeMonth;
+        );
 
-      const weeklyHours = ecceActive
-        ? Math.max(
-            0,
-            child.nonTermTimeHoursPerWeek - 15
-          )
-        : child.termTimeHoursPerWeek;
+      let weeklyHours: number;
+
+      // July & August
+      if (
+        monthInfo.month === 6 || // July
+        monthInfo.month === 7 // August
+      ) {
+        weeklyHours =
+          child.nonTermTimeHoursPerWeek;
+      }
+      // ECCE active during programme year
+      else if (ecceEligible) {
+        weeklyHours = Math.max(
+          0,
+          child.nonTermTimeHoursPerWeek - 15
+        );
+      }
+      // Not receiving ECCE
+      else {
+        weeklyHours =
+          child.termTimeHoursPerWeek;
+      }
 
       const monthlyNcs =
         weeklyHours *
@@ -152,7 +167,10 @@ export function generateMonthlyForecast(
 
       ncs += monthlyNcs;
 
-      if (ecceActive) {
+      if (
+        ecceEligible &&
+        isProgrammeMonth
+      ) {
         ecce +=
           ECCE_FUNDING_BY_DAYS[
             child.daysPerWeek
