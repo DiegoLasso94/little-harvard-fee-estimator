@@ -1,4 +1,4 @@
-import { calculateChild } from "./calculations";
+import { calculateChild, getMonthlyNcsFunding } from "./calculations";
 import type { Child } from "./types";
 
 const ECCE_FUNDING_BY_DAYS = {
@@ -147,12 +147,9 @@ export function generateMonthlyForecast(
         weeklyHours =
           child.nonTermTimeHoursPerWeek;
       }
-      // ECCE active during programme year
+      // ECCE active during programme year: use term-time hours
       else if (ecceEligible) {
-        weeklyHours = Math.max(
-          0,
-          child.nonTermTimeHoursPerWeek - 15
-        );
+        weeklyHours = child.termTimeHoursPerWeek;
       }
       // Not receiving ECCE
       else {
@@ -160,10 +157,10 @@ export function generateMonthlyForecast(
           child.termTimeHoursPerWeek;
       }
 
-      const monthlyNcs =
-        weeklyHours *
-        child.ncsHourlyRate *
-        weeks;
+      const monthlyNcs = getMonthlyNcsFunding(
+        weeklyHours,
+        child.ncsHourlyRate
+      );
 
       ncs += monthlyNcs;
 
