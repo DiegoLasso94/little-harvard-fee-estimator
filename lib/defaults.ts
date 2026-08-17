@@ -17,6 +17,7 @@ export function createEmptyChild(id?: string): Child {
     ncsHourlyRate: 0,
     termTimeHoursPerWeek: 0,
     nonTermTimeHoursPerWeek: 0,
+    futureChanges: [],
   };
 }
 
@@ -36,13 +37,13 @@ export function normalizeChild(child: Child): Child {
     daysPerWeek: validDays,
     ncsHourlyRate: Number(child.ncsHourlyRate) || 0,
     termTimeHoursPerWeek: Math.min(
-  45,
-  Number(child.termTimeHoursPerWeek) || 0
-),
-
-nonTermTimeHoursPerWeek: Math.min(
-  45,
-  Number(child.nonTermTimeHoursPerWeek) || 0
-),
+      45,
+      Number(child.termTimeHoursPerWeek) || 0
+    ),
+    nonTermTimeHoursPerWeek: Math.min(
+      45,
+      Number(child.nonTermTimeHoursPerWeek) || 0
+    ),
+    futureChanges: Array.isArray(child.futureChanges) ? child.futureChanges : [],
   };
 }

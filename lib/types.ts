@@ -1,3 +1,5 @@
+import type { FutureChange } from "./futureChanges";
+
 export type DaysPerWeek = 2 | 3 | 4 | 5;
 
 export interface Child {
@@ -10,6 +12,8 @@ export interface Child {
   ncsHourlyRate: number;
   termTimeHoursPerWeek: number;
   nonTermTimeHoursPerWeek: number;
+  futureChanges?: FutureChange[];
+  ecceFundingOverride?: number;
 }
 
 export interface ChildCalculations {

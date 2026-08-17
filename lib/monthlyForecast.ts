@@ -1,4 +1,5 @@
 import { calculateChild } from "./calculations";
+import { getEffectiveChildForMonth } from "./futureChanges";
 import type { Child } from "./types";
 
 const ECCE_FUNDING_BY_DAYS = {
@@ -137,13 +138,22 @@ export function generateMonthlyForecast(
       isEcceMonth(monthInfo.month);
 
     children.forEach((child) => {
-      const calc = calculateChild(child);
+      const effectiveChild = {
+        ...getEffectiveChildForMonth(
+          child,
+          monthInfo.year,
+          monthInfo.month
+        ),
+        futureChanges: [],
+      };
+
+      const calc = calculateChild(effectiveChild);
 
       fee += calc.fee;
 
       const ecceEligible =
         isEcceEligibleForMonth(
-          child,
+          effectiveChild,
           monthInfo.year,
           monthInfo.month
         );
