@@ -96,8 +96,8 @@ export function MonthlyForecast({
         term-time hours during September–June and
         non-term hours during July–August.
         <br />
-        NCS funding is calculated using the actual
-        number of Sundays in each month.
+        NCS funding is calculated using the month’s
+        4-week or 5-week pattern.
       </div>
     </div>
   );

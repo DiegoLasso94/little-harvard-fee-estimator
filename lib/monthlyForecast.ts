@@ -1,4 +1,4 @@
-import { calculateChild, getMonthlyNcsFunding } from "./calculations";
+import { calculateChild } from "./calculations";
 import type { Child } from "./types";
 
 const ECCE_FUNDING_BY_DAYS = {
@@ -19,13 +19,13 @@ export interface MonthlyForecastRow {
 }
 
 function countWeeks(year: number, month: number): number {
-  let weeks = 0;
-
   const daysInMonth = new Date(
     year,
     month + 1,
     0
   ).getDate();
+
+  let weeks = 0;
 
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(year, month, day);
@@ -56,6 +56,17 @@ function getNext12Months() {
       }),
     };
   });
+}
+
+function getNcsWeeklyHoursForMonth(
+  child: Child,
+  month: number
+): number {
+  if (month === 6 || month === 7) {
+    return child.nonTermTimeHoursPerWeek;
+  }
+
+  return child.termTimeHoursPerWeek;
 }
 
 function isEcceMonth(month: number): boolean {
@@ -137,30 +148,14 @@ export function generateMonthlyForecast(
           monthInfo.month
         );
 
-      let weeklyHours: number;
+      const weeklyHours =
+        getNcsWeeklyHoursForMonth(
+          child,
+          monthInfo.month
+        );
 
-      // July & August
-      if (
-        monthInfo.month === 6 || // July
-        monthInfo.month === 7 // August
-      ) {
-        weeklyHours =
-          child.nonTermTimeHoursPerWeek;
-      }
-      // ECCE active during programme year: use term-time hours
-      else if (ecceEligible) {
-        weeklyHours = child.termTimeHoursPerWeek;
-      }
-      // Not receiving ECCE
-      else {
-        weeklyHours =
-          child.termTimeHoursPerWeek;
-      }
-
-      const monthlyNcs = getMonthlyNcsFunding(
-        weeklyHours,
-        child.ncsHourlyRate
-      );
+      const monthlyNcs =
+        weeklyHours * child.ncsHourlyRate * weeks;
 
       ncs += monthlyNcs;
 
